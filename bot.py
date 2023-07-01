@@ -8,7 +8,7 @@ from discordwebhook import Discord
 # Discord webhook URL
 discord = Discord(url="REPLACE WITH YOUR WEBHOOK")
 # The last commit id we've seen
-last_commit_id = None
+last_commit_id = 0
 
 while True:
     # Request the page
@@ -16,13 +16,13 @@ while True:
     soup = BeautifulSoup(response.text, 'html.parser')
 
     # Find the first commit
-    commit = soup.find('div', class_='commit columns')
+    commit = soup.find('div', {'class' :'commit columns'})
 
     # Extract the commit id
-    commit_id = commit.find('span', class_='changeset').text
-    print(commit.find('span', class_='changeset').text)
+    commit_id = int(soup.find('div', {'class' :'commit columns'})['like-id'])
+
     # If this is a new commit
-    if commit_id != last_commit_id:
+    if commit_id > last_commit_id:
         # Update the last commit id
         last_commit_id = commit_id
 
